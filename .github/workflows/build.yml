@@ -1,5 +1,5 @@
 name: Build iOS Dylib
-on: workflow_dispatch:
+on: push: branches: - main
 jobs: build: runs-on: macos-latest
 steps:
   - name: Checkout Code
@@ -27,4 +27,3 @@ steps:
     with:
       name: iOS-Dylib
       path: .theos/obj/*.dylib
-    
