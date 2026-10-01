@@ -1,0 +1,30 @@
+name: Build iOS Dylib
+on: workflow_dispatch:
+jobs: build: runs-on: macos-latest
+steps:
+  - name: Checkout Code
+    uses: actions/checkout@v4
+
+  - name: Install Theos Dependencies
+    run: |
+      brew install ldid xz
+      
+  - name: Setup Theos
+    run: |
+      bash -c "$(curl -fsSL https://githubusercontent.com)"
+      echo "THEOS=$HOME/theos" >> $GITHUB_ENV
+      
+  - name: Checkout iOS SDK
+    run: |
+      git clone https://github.com $HOME/theos/sdks
+
+  - name: Compile Dylib
+    run: |
+      make package FINALPACKAGE=1
+      
+  - name: Upload Dylib Artifact
+    uses: actions/upload-artifact@v4
+    with:
+      name: iOS-Dylib
+      path: .theos/obj/*.dylib
+    
